@@ -99,23 +99,6 @@ class Google:
     # @param lang -> language of search results
     # @param num -> number of search results to return
     # 192.210.165.110:80:92316cheng:gproxy2
-    proxy_server = "192.210.165.110"
-    proxy_port = 80
-    proxy_user = "92316cheng"
-    proxy_passwd = "gproxy2"
-    proxy_support = urllib.request.ProxyHandler({
-        "http": "http://{user}:{passwd}@{server}:{port}".format(user=proxy_user,
-                                                                passwd=proxy_passwd,
-                                                                server=proxy_server,
-                                                                port=proxy_port),
-
-        "https": "https://{user}:{passwd}@{server}:{port}".format(user=proxy_user,
-                                                                passwd=proxy_passwd,
-                                                                server=proxy_server,
-                                                                port=proxy_port),
-    })
-    opener = urllib.request.build_opener(proxy_support)
-    urllib.request.install_opener(opener)
 
     def __init__(self, query, lang='zh', num=30):
         #timeout = 40
@@ -127,7 +110,34 @@ class Google:
         self.base_url = 'https://www.google.com.hk/'
         self.search_doc_list = []
         self.search_url_list = []
-        #self._test_proxy()
+        self._set_proxy()
+
+    def _set_proxy(self):
+        proxy_ip_list = ["158.222.4.237",
+                         "158.222.4.207",
+                         "192.210.165.101",
+                         "104.203.43.36",
+                         "107.173.254.211"]
+        proxy_server = random.choice(proxy_ip_list)
+        print("using proxy ip", proxy_server)
+        #proxy_server = "158.222.4.237"
+        proxy_port = 80
+        proxy_user = "92316cheng"
+        proxy_passwd = "gproxy2"
+        proxy_support = urllib.request.ProxyHandler({
+            "http": "http://{user}:{passwd}@{server}:{port}".format(user=proxy_user,
+                                                                    passwd=proxy_passwd,
+                                                                    server=proxy_server,
+                                                                    port=proxy_port),
+
+            "https": "https://{user}:{passwd}@{server}:{port}".format(user=proxy_user,
+                                                                    passwd=proxy_passwd,
+                                                                    server=proxy_server,
+                                                                    port=proxy_port),
+        })
+        opener = urllib.request.build_opener(proxy_support)
+        urllib.request.install_opener(opener)
+
 
     def _test_proxy(self):
         rq = urllib.request.Request('http://www.google.com')
@@ -225,16 +235,17 @@ class Google:
                 except urllib.error.URLError as e:
                     print('url error:', e)
                     self.randomSleep()
+                    self._set_proxy()
                     retry = retry - 1
                     continue
 
                 except Exception as e:
-                    print('error:', e)
                     retry = retry - 1
                     self.randomSleep()
                     continue
 
-        return self.search_url_list, self.search_doc_list
+        #return self.search_url_list, self.search_doc_list
+        return "|".join(self.search_doc_list[:3])
 
 
 class Baidu:
