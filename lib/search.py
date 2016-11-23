@@ -117,7 +117,12 @@ class Google:
                          "158.222.4.207",
                          "192.210.165.101",
                          "104.203.43.36",
-                         "107.173.254.211"]
+                         "107.173.254.211",
+                         "158.222.4.7",
+                         "192.210.165.103",
+                         "172.245.195.135"
+                         
+        ]
         proxy_server = random.choice(proxy_ip_list)
         print("using proxy ip", proxy_server)
         #proxy_server = "158.222.4.237"

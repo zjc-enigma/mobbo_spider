@@ -121,7 +121,7 @@ class MobboSpider:
         detail_info_generator = (item.text() for item in doc('div.newInnerDetails')('span').items())
         DetailInfo = namedtuple('DetailInfo', 'app_size, version, required_os, rating')
         detail_info = DetailInfo(*detail_info_generator)
-        # detail_info = DetailInfo(*info_generator)
+
         basic_info.update(detail_info._asdict())
         return basic_info
 
